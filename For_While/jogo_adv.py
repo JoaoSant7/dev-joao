@@ -1,5 +1,5 @@
 # Jogo de adivinhação
-secreto = 42
+secreto = 67
 palpite = None
 
 while palpite != secreto:
