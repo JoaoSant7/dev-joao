@@ -2,7 +2,9 @@
 
 # Ao invés de criar um objeto diretamente, com um construtor grande e confuso, o Builder permite montá-lo aos poucos, através de métodos específicos.abs
 
-# Builder -> classe que serve como "template", definindo os métodos (partes) que serão adicionados.abs
+# O modelo funciona como uma espécie de molde, ou template, definindo a forma que o combo (objeto final) deverá seguir
+
+# Builder -> classe que serve como um construtor, conforme o seu nome indica, definindo os métodos (partes) que serão adicionados ao modelo
 
 # Produto -> o objeto final que é construído
 
@@ -156,6 +158,10 @@ class Pedido:
 # -----------------------------
 # INTERFACE DE MENU
 # -----------------------------
+
+# É só um menu interativo :)
+
+
 def menu_interativo():
     pedido = Pedido()
     builder = ComboBuilder()
