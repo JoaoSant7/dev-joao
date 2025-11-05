@@ -2,11 +2,19 @@ from dataclasses import dataclass, field
 from typing import Optional, List
 from uuid import uuid4
 
+# O que faz cada import?
+
+# dataclass simplifica a criação de classes que guardam dados
+
+# Optional e List são anotações de tipo
+
+# uuid4 gera um id único para cada pedido
+
 
 # -----------------------------
 # MODELO: COMBO
 # -----------------------------
-@dataclass(frozen=True)
+@dataclass(frozen=True)  # classe imutável = não altera seus atributos
 class Combo:
     pipoca: Optional[str] = None
     bebida: Optional[str] = None
@@ -28,6 +36,9 @@ class Combo:
         return f"{desc} — Total: R${self.preco_total:.2f}"
 
 
+# O modelo combo representa o produto final construído e sua estrutura
+
+
 # -----------------------------
 # BUILDER: COMBOBUILDER
 # -----------------------------
@@ -37,8 +48,14 @@ class ComboBuilder:
     PRECO_CHOCOLATE = 6.0
     PRECOS_EXTRAS = {"nachos": 12.0, "molho extra": 3.0, "balas": 4.0}
 
+    # Os dicionários de preço são constantes da classe
+
     def __init__(self):
-        self._reset()
+        self._reset()  # chama reset para inicializar o estado interno do builder
+
+    # reset zera os campos internos do builder
+
+    # cada método altera o estado interno do builder e retorna self, permitindo encadeamento (fluent interface)
 
     def _reset(self):
         self._pipoca = None
@@ -54,6 +71,8 @@ class ComboBuilder:
         self._pipoca = tamanho
         self._preco_total += self.PRECOS_PIPOCA[tamanho]
         return self
+
+        # valida a entrada, atualiza _pipoca e soma o preço ao _preco_total
 
     def add_bebida(self, tipo: str):
         if tipo not in self.PRECOS_BEBIDA:
@@ -75,6 +94,7 @@ class ComboBuilder:
         self._preco_total += self.PRECOS_EXTRAS[item]
         return self
 
+    # cria e retorna uma instância combo com os valores atuais
     def get_combo(self, reset_builder: bool = True) -> Combo:
         combo = Combo(
             pipoca=self._pipoca,
@@ -83,25 +103,38 @@ class ComboBuilder:
             extras=list(self._extras),
             preco_total=round(self._preco_total, 2),
         )
-        if reset_builder:
+        if (
+            reset_builder
+        ):  # se reset_builder for True, o builder é resetado apósa criação. Cada get_combo() fecha o combo e recomeça.
             self._reset()
         return combo
+
+        # os métodos montam o objeto, como se fossem peças de um jogo de Lego que, ao serem combinadas de diferentes modos, criam diversas possibilidades (combos)
 
 
 # -----------------------------
 # PEDIDO
 # -----------------------------
+
+# é o agregador de combos
+
+
 @dataclass
 class Pedido:
     combos: List[Combo] = field(default_factory=list)
     pedido_id: str = field(default_factory=lambda: str(uuid4()))
+    # armazena uma lista de Combo e gera um pedido_id único
 
     @property
     def total(self) -> float:
         return round(sum(c.preco_total for c in self.combos), 2)
 
+    # total é uma propriedade que soma os preços dos combos
+
     def adicionar_combo(self, combo: Combo):
         self.combos.append(combo)
+
+    # adiciona um combo à lista
 
     def __str__(self):
         texto = [f"\nPedido #{self.pedido_id[:8]}:"]
