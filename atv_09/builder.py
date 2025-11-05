@@ -1,3 +1,12 @@
+# Antes de iniciar o código, vale a pena explicar como funciona o Padrão Builder.
+
+# Ao invés de criar um objeto diretamente, com um construtor grande e confuso, o Builder permite montá-lo aos poucos, através de métodos específicos.abs
+
+# Builder -> classe que serve como "template", definindo os métodos (partes) que serão adicionados.abs
+
+# Produto -> o objeto final que é construído
+
+
 from dataclasses import dataclass, field
 from typing import Optional, List
 from uuid import uuid4
